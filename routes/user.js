@@ -109,4 +109,22 @@ userRouter.put('/note/:id', authMiddleware, async(req, res) => {
 });
     }
 })
+userRouter.delete('/note/:id', authMiddleware, async(req, res) => {
+    const noteId = req.params.id
+
+    const noteFound = await noteModel.findOneAndDelete({
+        _id: noteId,
+        userId: req.userId
+    })
+
+    if(!noteFound){
+        return res.json({
+            msg: "Note Not Found"
+        })
+    } else {
+        return res.json({
+    msg: "Note deleted successfully"
+});
+    }
+})
 export default userRouter;
