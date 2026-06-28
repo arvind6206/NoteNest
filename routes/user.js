@@ -88,7 +88,25 @@ userRouter.post("/create", authMiddleware, async(req, res) => {
     }
 })
 
-userRouter.put('/create', authMiddleware, (req, res) => {
-    
+userRouter.put('/note/:id', authMiddleware, async(req, res) => {
+    const noteId = req.params.id
+    const {title, content, isPinned, isArchived, isTrashed} = req.body
+
+    const noteFound = await noteModel.findOneAndUpdate({
+        _id: noteId,
+        userId: req.userId
+    }, {
+        title, content, isPinned, isArchived, isTrashed
+    })
+
+    if(!noteFound){
+        return res.json({
+            msg: "Note Not Found"
+        })
+    } else {
+        return res.json({
+    msg: "Note updated successfully"
+});
+    }
 })
 export default userRouter;
