@@ -40,5 +40,5 @@ const noteSchema = new mongoose.Schema({
 },{timestamps: true}
 )
 
-const userModel = mongoose.model('User', userSchema) 
-export {userModel}
+export const userModel = mongoose.model('User', userSchema) 
+export const noteModel = mongoose.model('Note', noteSchema) 

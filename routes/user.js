@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { userModel } from "../model/user.model.js";
+import { noteModel, userModel } from "../model/user.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import authMiddleware from "../middleware/auth.js";
 
 const userRouter = Router();
 
@@ -71,4 +72,23 @@ userRouter.post("/signin", async (req, res) => {
   }
 });
 
+userRouter.post("/create", authMiddleware, async(req, res) => {
+    console.log(req.userId)
+    const {title, content, isPinned, isArchived, isTrashed} = req.body
+
+    try {
+        await noteModel.create({
+            title, content, userId: req.userId, isPinned, isArchived, isTrashed
+        })
+        res.status(200).json({
+            msg: "notes created successfully"
+        })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+userRouter.put('/create', authMiddleware, (req, res) => {
+    
+})
 export default userRouter;
