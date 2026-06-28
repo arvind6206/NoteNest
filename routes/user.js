@@ -109,7 +109,10 @@ userRouter.put('/note/:id', authMiddleware, async(req, res) => {
 });
     }
 })
+<<<<<<< HEAD
 
+=======
+>>>>>>> 456ec97a39fef719b6f4c873d4c0e9b0b6220993
 userRouter.delete('/note/:id', authMiddleware, async(req, res) => {
     const noteId = req.params.id
 
