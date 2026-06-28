@@ -109,4 +109,101 @@ userRouter.put('/note/:id', authMiddleware, async(req, res) => {
 });
     }
 })
+
+userRouter.delete('/note/:id', authMiddleware, async(req, res) => {
+    const noteId = req.params.id
+
+    const noteFound = await noteModel.findOneAndDelete({
+        _id: noteId,
+        userId: req.userId
+    })
+
+    if(!noteFound){
+        return res.json({
+            msg: "Note Not Found"
+        })
+    } else {
+        return res.json({
+    msg: "Note deleted successfully"
+});
+    }
+})
+
+userRouter.patch("/note/:id/pin", authMiddleware, async (req, res) => {
+    const note = await noteModel.findOneAndUpdate(
+        {
+            _id: req.params.id,
+            userId: req.userId
+        },
+        {
+            isPinned: true
+        },
+        {
+            new: true
+        }
+    );
+
+    if (!note) {
+        return res.status(404).json({
+            msg: "Note not found"
+        });
+    }
+
+    res.json({
+        msg: "Note pinned successfully",
+        note
+    });
+});
+
+userRouter.patch("/note/:id/archive", authMiddleware, async (req, res) => {
+    const note = await noteModel.findOneAndUpdate(
+        {
+            _id: req.params.id,
+            userId: req.userId
+        },
+        {
+            isArchived: true
+        },
+        {
+            new: true
+        }
+    );
+
+    if (!note) {
+        return res.status(404).json({
+            msg: "Note not found"
+        });
+    }
+
+    res.json({
+        msg: "Note archived successfully",
+        note
+    });
+});
+
+userRouter.patch("/note/:id/trash", authMiddleware, async (req, res) => {
+    const note = await noteModel.findOneAndUpdate(
+        {
+            _id: req.params.id,
+            userId: req.userId
+        },
+        {
+            isTrashed: true
+        },
+        {
+            new: true
+        }
+    );
+
+    if (!note) {
+        return res.status(404).json({
+            msg: "Note not found"
+        });
+    }
+
+    res.json({
+        msg: "Note moved to trash",
+        note
+    });
+});
 export default userRouter;
